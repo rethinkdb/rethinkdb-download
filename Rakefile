@@ -13,6 +13,6 @@ task :release do
     src = '/srv/rethinkdb-download-mirror'
     dest = "#{remote}:/srv/www/download.rethinkdb.com/public_html"
     command = "rsync -Przvh --delete -e \'ssh -p 440\' #{src}/ #{dest}"
-    sh "ssh teapot@dr-doom -t -p 440 '#{command}'"
+    sh "ssh teapot@dr-doom -t '#{command}'"
     puts 'Synced dr-doom mirror with Linode.'
 end
