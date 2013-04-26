@@ -5,7 +5,7 @@ task :update_nginx do
     dest = "#{remote}:/srv/www/download.rethinkdb.com/"
     nginx_conf = "nginx.conf"
     sh "scp -P 440 #{nginx_conf} #{dest}"
-    sh "ssh #{host} -t -p 440 'sudo service nginx restart'"
+    sh "ssh #{remote} -t -p 440 'sudo service nginx restart'"
 end
 
 desc 'Use rsync to deploy binaries to the download server.'
