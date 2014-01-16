@@ -1,4 +1,4 @@
-remote = "72.14.189.19"
+remote = "teapot@72.14.189.19"
 
 desc 'Update the nginx configuration'
 task :update_nginx do
