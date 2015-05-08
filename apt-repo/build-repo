@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -eu
+
+here=$(dirname "$0")
+export APT_REPO_DIR=$(readlink -f "$here")
+. "$here/freight.conf"
+
+rm -rf "$VARCACHE"
+
+distros=$(cd "$here/lib"; ls -d apt/*)
+"$here/freight/bin/freight-cache" -c "$APT_REPO_DIR/freight.conf" $distros
+
+find "$VARCACHE" -depth -name .refs -exec rm -rf {} \;
+
+(
+    cd "$VARCACHE/dists"
+    for dir in *-*; do
+        name=`echo $dir | cut -f 1 -d -`
+        rm $name
+        mv $dir $name
+    done
+)
+
+git annex fix "$VARCACHE"
+git annex add "$VARCACHE"

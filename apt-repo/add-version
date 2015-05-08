@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -eu
+
+version=${1:-}
+here=$(dirname "$0")
+
+if [[ -z "$version" ]]; then
+    echo "usage: $0 <version>" >&2
+    exit 1
+fi
+
+dir=$here/../version/$version/deb
+
+if [[ ! -d "$dir" ]]; then
+    echo "No such directory '$dir'" >&2
+    exit 1
+fi
+
+abspath () (
+    cd "$(dirname "$1")"
+    echo "`pwd`/$(basename "$1")"
+)
+
+for deb in "$dir"/rethinkdb_*.deb; do
+    codename=$(basename "$deb" | cut -f 2 -d \~ | cut -f 1 -d _ | cut -f 2 -d 0)
+    export APT_REPO_DIR=$(abspath "$here")
+    freight/bin/freight-add -v -c "$APT_REPO_DIR/freight.conf" "$deb" "apt/$codename"
+done
+
+git annex fix "$here/lib"
+git annex add "$here/lib"
