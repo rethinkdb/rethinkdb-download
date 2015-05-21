@@ -25,7 +25,7 @@ abspath () (
 for deb in "$dir"/rethinkdb_*.deb; do
     codename=$(basename "$deb" | cut -f 2 -d \~ | cut -f 1 -d _ | cut -f 2 -d 0)
     export APT_REPO_DIR=$(abspath "$here")
-    freight/bin/freight-add -v -c "$APT_REPO_DIR/freight.conf" "$deb" "apt/$codename"
+    "$here"/freight/bin/freight-add -v -c "$APT_REPO_DIR/freight.conf" "$deb" "apt/$codename"
 done
 
 git annex fix "$here/lib"
