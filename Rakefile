@@ -57,7 +57,7 @@ task :copy do
     cpe "#{src}/dist", "#{dst}/dist", "rethinkdb-#{version}.tgz"
     cpe "#{src}/osx", "#{dst}/osx", "rethinkdb.dmg", "rethinkdb-#{version}.dmg"
     ['i686', 'x86_64'].each do |arch|
-        cpe "#{src}/centos", "#{dst}/centos/6/#{arch}", "rethinkdb-#{version}.#{arch}.rpm"
+        cpe "#{src}/centos", "#{dst}/centos/6/#{arch}", "rethinkdb-2.1.0_1.#{arch}.rpm"
         sh "git annex add #{dst}/centos/6/#{arch}"
         sh "git annex unlock #{dst}/centos/6/#{arch}/repodata"
         sh "createrepo #{dst}/centos/6/#{arch}"
