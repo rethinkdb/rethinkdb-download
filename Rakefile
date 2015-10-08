@@ -22,7 +22,7 @@ task :publish, [:force] do |t, args|
     end
 
     src = 'download.rethinkdb.com'
-    sh "rsync --progress --recursive --delete --compress --human-readable --rsh='ssh -p 440' --itemize-changes --copy-links #{pretend} #{src}/ #{remote_path}"
+    sh "rsync --progress --recursive --delete --compress --human-readable --rsh='ssh -p 440' --itemize-changes --delay-updates --copy-links #{pretend} #{src}/ #{remote_path}"
 
     if args.force == "force"
       puts "Published to #{remote_path}."
