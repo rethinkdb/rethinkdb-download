@@ -1,3 +1,5 @@
+# TODO: sign source distribution: gpg --armor --detach-sign file.tgz
+
 require 'fileutils'
 
 remote = "teapot@72.14.189.19"
