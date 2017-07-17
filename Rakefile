@@ -56,7 +56,7 @@ task :copy do
     dst = "download.rethinkdb.com"
     cpe "#{src}/dist", "#{dst}/dist", "rethinkdb-#{version}.tgz"
     cpe "#{src}/osx", "#{dst}/osx", "rethinkdb.dmg", "rethinkdb-#{version}.dmg"
-    [[6, 'i686'], [6, 'x86_64'], [7, 'x86_64']].each do |pair|
+    [[6, 'x86_64'], [7, 'x86_64']].each do |pair|
         ver, arch = pair
         cpe "#{src}/centos#{ver}", "#{dst}/centos/#{ver}/#{arch}", "rethinkdb-#{version.sub('-','_')}.#{arch}.rpm"
         sh "git annex add #{dst}/centos/#{ver}/#{arch}"
