@@ -3,13 +3,13 @@
 require 'fileutils'
 
 remote = "teapot@167.71.110.79"
-dest = "#{remote}:/etc/nginx/sites-available/download.rethinkdb.com"
-remote_path = "#{dest}/public_html"
+config_path = "/etc/nginx/sites-available/download.rethinkdb.com"
+remote_path = "/var/www/download.rethinkdb.com/public_html"
 
 desc 'Update the nginx configuration'
 task :update_nginx do
     nginx_conf = "nginx.conf"
-    sh "scp #{nginx_conf} #{dest}"
+    sh "scp #{nginx_conf} #{remote}:#{config_path}"
     sh "ssh #{remote} -t 'sudo service nginx restart'"
 end
 
@@ -24,7 +24,8 @@ task :publish, [:force] do |t, args|
     end
 
     src = 'download.rethinkdb.com'
-    sh "rsync --progress --recursive --delete --compress --human-readable --rsh='ssh' --itemize-changes --delay-updates --copy-links #{pretend} #{src}/ #{remote_path}"
+    # Have removed --delay-updates to avoid running out of disk space.
+    sh "rsync --progress --recursive --delete --compress --human-readable --rsh='ssh' --itemize-changes --copy-links #{pretend} #{src}/ #{remote}:#{remote_path}"
 
     if args.force == "force"
       puts "Published to #{remote_path}."
