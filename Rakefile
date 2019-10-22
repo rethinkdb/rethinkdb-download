@@ -3,7 +3,7 @@
 require 'fileutils'
 
 remote = "teapot@167.71.110.79"
-remote_path = "/etc/nginx/sites-available/download.rethinkdb.com/public_html"
+remote_path = "/var/www/download.rethinkdb.com/public_html"
 
 desc 'Update the nginx configuration'
 task :update_nginx do
@@ -21,9 +21,11 @@ task :publish, [:force] do |t, args|
       puts "Not publishing to #{remote_path} (Dry-run, use publish[force] to do the actual upload)."
       pretend = "--dry-run"
     end
-
+    
     src = 'download.rethinkdb.com'
-    sh "rsync --progress --recursive --delete --compress --human-readable --rsh='ssh' --itemize-changes --delay-updates --copy-links #{pretend} #{src}/ #{remote}:#{remote_path}"
+    # Have removed --delay-updates to avoid running out of disk space.
+
+    sh "rsync --progress --recursive --delete --compress --human-readable --rsh='ssh' --itemize-changes --copy-links #{pretend} #{src}/ #{remote}:#{remote_path}"
 
     if args.force == "force"
       puts "Published to #{remote_path}."
