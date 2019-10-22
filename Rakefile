@@ -3,13 +3,12 @@
 require 'fileutils'
 
 remote = "teapot@167.71.110.79"
-config_path = "/etc/nginx/sites-available/download.rethinkdb.com"
-remote_path = "/var/www/download.rethinkdb.com/public_html"
+remote_path = "/etc/nginx/sites-available/download.rethinkdb.com/public_html"
 
 desc 'Update the nginx configuration'
 task :update_nginx do
     nginx_conf = "nginx.conf"
-    sh "scp #{nginx_conf} #{remote}:#{config_path}"
+    sh "scp #{nginx_conf} #{remote}:/etc/nginx/sites-available/download.rethinkdb.com"
     sh "ssh #{remote} -t 'sudo service nginx restart'"
 end
 
@@ -24,8 +23,7 @@ task :publish, [:force] do |t, args|
     end
 
     src = 'download.rethinkdb.com'
-    # Have removed --delay-updates to avoid running out of disk space.
-    sh "rsync --progress --recursive --delete --compress --human-readable --rsh='ssh' --itemize-changes --copy-links #{pretend} #{src}/ #{remote}:#{remote_path}"
+    sh "rsync --progress --recursive --delete --compress --human-readable --rsh='ssh' --itemize-changes --delay-updates --copy-links #{pretend} #{src}/ #{remote}:#{remote_path}"
 
     if args.force == "force"
       puts "Published to #{remote_path}."
@@ -59,7 +57,7 @@ task :copy do
     dst = "download.rethinkdb.com"
     cpe "#{src}/dist", "#{dst}/dist", "rethinkdb-#{version}.tgz"
     cpe "#{src}/osx", "#{dst}/osx", "rethinkdb.dmg", "rethinkdb-#{version}.dmg"
-    [[6, 'x86_64'], [7, 'x86_64'], [8, 'x86_64']].each do |pair|
+    [[6, 'x86_64'], [7, 'x86_64']].each do |pair|
         ver, arch = pair
         cpe "#{src}/centos#{ver}", "#{dst}/centos/#{ver}/#{arch}", "rethinkdb-#{version.sub('-','_')}.#{arch}.rpm"
         sh "git annex add #{dst}/centos/#{ver}/#{arch}"
