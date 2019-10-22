@@ -21,7 +21,7 @@ task :publish, [:force] do |t, args|
       puts "Not publishing to #{remote_path} (Dry-run, use publish[force] to do the actual upload)."
       pretend = "--dry-run"
     end
-    
+
     src = 'download.rethinkdb.com'
     # Have removed --delay-updates to avoid running out of disk space.
 
