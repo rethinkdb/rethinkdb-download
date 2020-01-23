@@ -21,3 +21,4 @@ Run `git annex get <path>` to download a file.
 * `rake update-nginx` - upload the nginx config to the server
 * `rake publish` - pretend to publish the files to download.rethinkdb.com using `rsync --dry-run`
 * `rake publish[force]` - actually publish the files.
+* `vim downloads.rethinkdb.com/latest_version.txt` - for the new update checker when making a new release
